@@ -19,6 +19,9 @@
     "standard": "^6.0.8"
   },
   "dependencies": {
-    "clean-obj": "^1.0.0"
+    "async": "^1.5.2",
+    "clean-obj": "^1.0.0",
+    "moment": "^2.13.0",
+    "semver": "^5.1.0"
   }
 }
