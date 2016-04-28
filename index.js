@@ -4,7 +4,12 @@ var score = require('./lib/rank').score
 
 module.exports = moduleRank
 
-function moduleRank (moduleName, done) {
+function moduleRank (moduleName, version, done) {
+  if (typeof version === 'function') {
+    done = version
+    version = 'latest'
+  }
+
   var prj = new Project(moduleName)
 
   prj.loadDetails(function (err) {
