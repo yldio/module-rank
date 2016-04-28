@@ -9,10 +9,13 @@ npm i module-rank
 ## Usage
 
 ```js
-moduleRank('express', function (err, rank) {
-  // rank { criteria: obj , score: int }
-})
+moduleRank('express' [, version], callback)
 ```
+
+### Parameters
+##### - moduleName
+##### - moduleVersion
+##### - callback(err, rank)
 
 ## License
 MIT
