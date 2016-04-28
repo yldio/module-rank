@@ -10,7 +10,7 @@ function moduleRank (moduleName, version, done) {
     version = 'latest'
   }
 
-  var prj = new Project(moduleName)
+  var prj = new Project(moduleName, version)
 
   prj.loadDetails(function (err) {
     if (err) {
@@ -18,7 +18,7 @@ function moduleRank (moduleName, version, done) {
     }
 
     var rank = {
-      criteria: criteria(prj.export())
+      criteria: criteria(prj)
     }
     rank.score = score(rank.criteria)
 
