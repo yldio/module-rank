@@ -18,7 +18,8 @@ function moduleRank (moduleName, version, done) {
     }
 
     var rank = {
-      criteria: criteria(prj)
+      criteria: criteria(prj),
+      license: prj.license
     }
     rank.score = score(rank.criteria)
 
