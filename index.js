@@ -1,10 +1,11 @@
 var Project = require('./lib/project')
-var criteria = require('./lib/rank').criteria
-var score = require('./lib/rank').score
+var rank = require('./lib/rank')
 
 var projectDataSource = function (done) {
   done()
 }
+
+var licensesWhiteList = require('./lib/licenses-whitelist')
 
 module.exports = moduleRank
 module.exports.config = config
@@ -18,26 +19,33 @@ function moduleRank (moduleName, version, done) {
   var prj = new Project(moduleName, version)
 
   prj.loadDataSource(projectDataSource)
+  prj.loadWhiteListOfLicenses(licensesWhiteList)
 
   prj.loadDetails(function (err) {
     if (err) {
       return done(err)
     }
 
-    var rank = {
-      criteria: criteria(prj),
-      license: prj.license
-    }
-    rank.score = score(rank.criteria)
+    rank(prj, function (err, mdlRank) {
+      if (err) {
+        return done(err)
+      }
 
-    return done(null, rank)
+      mdlRank.license = prj.license
+      return done(null, mdlRank)
+    })
   })
 }
 
 function config (options) {
   var dataSource = options.dataSource
+  var whiteList = options.licensesWhiteList
 
   if (dataSource && typeof dataSource === 'function') {
     projectDataSource = dataSource
+  }
+
+  if (whiteList && Array.isArray(whiteList)) {
+    licensesWhiteList = whiteList
   }
 }
