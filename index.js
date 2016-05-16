@@ -1,51 +1,22 @@
-var Project = require('./lib/project')
 var rank = require('./lib/rank')
-
-var projectDataSource = function (done) {
-  done()
-}
-
-var licensesWhiteList = require('./lib/licenses-whitelist')
+var moduleDataValidate = require('module-data/validate')
+var defaultLicensesWhiteList = require('./lib/licenses-whitelist')
 
 module.exports = moduleRank
-module.exports.config = config
 
-function moduleRank (moduleName, version, done) {
-  if (typeof version === 'function') {
-    done = version
-    version = 'latest'
+function moduleRank (mdlData, options, done) {
+  if (typeof options === 'function') {
+    done = options
+    options = {}
   }
 
-  var prj = new Project(moduleName, version)
-
-  prj.loadDataSource(projectDataSource)
-  prj.loadWhiteListOfLicenses(licensesWhiteList)
-
-  prj.loadDetails(function (err) {
+  moduleDataValidate('standard', mdlData, function (err) {
     if (err) {
-      return done(err)
+      return done(new Error('module-rank called with an invalid module-data object.'))
     }
 
-    rank(prj, function (err, mdlRank) {
-      if (err) {
-        return done(err)
-      }
+    options.licensesWhiteList = options.licensesWhiteList || defaultLicensesWhiteList
 
-      mdlRank.license = prj.license
-      return done(null, mdlRank)
-    })
+    return rank(mdlData, options, done)
   })
-}
-
-function config (options) {
-  var dataSource = options.dataSource
-  var whiteList = options.licensesWhiteList
-
-  if (dataSource && typeof dataSource === 'function') {
-    projectDataSource = dataSource
-  }
-
-  if (whiteList && Array.isArray(whiteList)) {
-    licensesWhiteList = whiteList
-  }
 }
