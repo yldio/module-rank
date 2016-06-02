@@ -1,6 +1,6 @@
 {
   "name": "module-rank",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Rank your node.js module",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,6 @@
   },
   "dependencies": {
     "lodash.omit": "^4.3.0",
-    "module-data": "git@github.com:yldio/module-data.git"
+    "module-data": "^0.1.0"
   }
 }
